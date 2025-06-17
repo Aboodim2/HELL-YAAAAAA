@@ -6,8 +6,8 @@ local keyGui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
 keyGui.Name = "KeyGui"
 
 local background = Instance.new("Frame", keyGui)
-background.Size = UDim2.new(0, 300, 0, 200)
-background.Position = UDim2.new(0.5, -150, 0.5, -100)
+background.Size = UDim2.new(0, 300, 0, 260)
+background.Position = UDim2.new(0.5, -150, 0.5, -130)
 background.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 background.BorderSizePixel = 0
 background.BackgroundTransparency = 0.1
@@ -54,6 +54,29 @@ message.TextSize = 14
 message.TextColor3 = Color3.fromRGB(255, 50, 50)
 message.TextWrapped = true
 
+local copyKeyBox = Instance.new("TextBox", background)
+copyKeyBox.Size = UDim2.new(0.9, 0, 0, 30)
+copyKeyBox.Position = UDim2.new(0.05, 0, 0, 185)
+copyKeyBox.TextEditable = false
+copyKeyBox.Text = "Click 'Get Key' to load it..."
+copyKeyBox.Font = Enum.Font.Gotham
+copyKeyBox.TextSize = 14
+copyKeyBox.TextColor3 = Color3.fromRGB(0, 0, 0)
+copyKeyBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+copyKeyBox.ClearTextOnFocus = false
+copyKeyBox.TextWrapped = true
+copyKeyBox.BorderSizePixel = 0
+
+local copyButton = Instance.new("TextButton", background)
+copyButton.Size = UDim2.new(0.9, 0, 0, 30)
+copyButton.Position = UDim2.new(0.05, 0, 0, 220)
+copyButton.Text = "📋 Get Today’s Key"
+copyButton.Font = Enum.Font.GothamBold
+copyButton.TextSize = 14
+copyButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+copyButton.BackgroundColor3 = Color3.fromRGB(0, 200, 100)
+copyButton.BorderSizePixel = 0
+
 -- Load main NUH HUB
 local function loadNUHHub()
     loadstring(game:HttpGet("https://pastebin.com/raw/EazBb0qq"))()
@@ -75,7 +98,15 @@ local function checkKey(inputKey)
     end
 end
 
--- Button event
+-- Events
 button.MouseButton1Click:Connect(function()
     checkKey(textBox.Text)
+end)
+
+copyButton.MouseButton1Click:Connect(function()
+    local currentDate = os.date("!*t")
+    local key = "KEY-" .. currentDate.year .. string.format("%02d", currentDate.month) .. string.format("%02d", currentDate.day)
+    copyKeyBox.Text = key
+    message.Text = "✅ Key copied to textbox! You can copy it manually."
+    message.TextColor3 = Color3.fromRGB(255, 255, 0)
 end)

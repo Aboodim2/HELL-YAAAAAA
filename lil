@@ -1,55 +1,81 @@
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
--- Create key input GUI
-local keyGui = Instance.new("ScreenGui")
-local textBox = Instance.new("TextBox")
-local button = Instance.new("TextButton")
-local message = Instance.new("TextLabel")
-
+-- GUI Setup
+local keyGui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
 keyGui.Name = "KeyGui"
-keyGui.Parent = player:WaitForChild("PlayerGui")
 
-textBox.Size = UDim2.new(0, 200, 0, 50)
-textBox.Position = UDim2.new(0.5, -100, 0.4, 0)
-textBox.PlaceholderText = "Enter your key here"
-textBox.Parent = keyGui
-textBox.ClearTextOnFocus = false
+local background = Instance.new("Frame", keyGui)
+background.Size = UDim2.new(0, 300, 0, 200)
+background.Position = UDim2.new(0.5, -150, 0.5, -100)
+background.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+background.BorderSizePixel = 0
+background.BackgroundTransparency = 0.1
+background.AnchorPoint = Vector2.new(0.5, 0.5)
+
+local title = Instance.new("TextLabel", background)
+title.Size = UDim2.new(1, 0, 0, 30)
+title.Position = UDim2.new(0, 0, 0, 10)
+title.BackgroundTransparency = 1
+title.Text = "Enter NUH HUB Key"
+title.Font = Enum.Font.GothamBold
+title.TextSize = 18
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+local textBox = Instance.new("TextBox", background)
+textBox.Size = UDim2.new(0.9, 0, 0, 40)
+textBox.Position = UDim2.new(0.05, 0, 0, 50)
+textBox.PlaceholderText = "KEY-YYYYMMDD"
 textBox.Text = ""
+textBox.Font = Enum.Font.Gotham
+textBox.TextSize = 16
+textBox.ClearTextOnFocus = true
+textBox.TextColor3 = Color3.fromRGB(0, 0, 0)
+textBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+textBox.BorderSizePixel = 0
 
-button.Size = UDim2.new(0, 200, 0, 50)
-button.Position = UDim2.new(0.5, -100, 0.5, 0)
-button.Text = "Submit Key"
-button.Parent = keyGui
+local button = Instance.new("TextButton", background)
+button.Size = UDim2.new(0.9, 0, 0, 40)
+button.Position = UDim2.new(0.05, 0, 0, 100)
+button.Text = "🔐 Submit Key"
+button.Font = Enum.Font.GothamBold
+button.TextSize = 16
+button.TextColor3 = Color3.fromRGB(255, 255, 255)
+button.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+button.BorderSizePixel = 0
 
-message.Size = UDim2.new(0, 300, 0, 50)
-message.Position = UDim2.new(0.5, -150, 0.6, 0)
+local message = Instance.new("TextLabel", background)
+message.Size = UDim2.new(0.9, 0, 0, 30)
+message.Position = UDim2.new(0.05, 0, 0, 150)
+message.BackgroundTransparency = 1
 message.Text = ""
-message.TextColor3 = Color3.new(1, 0, 0)
-message.Parent = keyGui
+message.Font = Enum.Font.Gotham
+message.TextSize = 14
+message.TextColor3 = Color3.fromRGB(255, 50, 50)
+message.TextWrapped = true
 
+-- Load main NUH HUB
 local function loadNUHHub()
-    -- Your entire NUH HUB script here
-    -- For example, loading from Pastebin:
     loadstring(game:HttpGet("https://pastebin.com/raw/EazBb0qq"))()
 end
 
+-- Check the key
 local function checkKey(inputKey)
-    local currentDate = os.date("!*t") -- UTC date/time
-    local correctKey = "KEY-" .. currentDate.year .. currentDate.month .. currentDate.day
+    local currentDate = os.date("!*t") -- UTC time
+    local correctKey = "KEY-" .. currentDate.year .. string.format("%02d", currentDate.month) .. string.format("%02d", currentDate.day)
     if inputKey == correctKey then
-        message.TextColor3 = Color3.new(0, 1, 0)
+        message.TextColor3 = Color3.fromRGB(50, 255, 50)
         message.Text = "✅ Correct key! Loading NUH HUB..."
-        wait(1)
+        wait(1.5)
         keyGui:Destroy()
         loadNUHHub()
     else
-        message.TextColor3 = Color3.new(1, 0, 0)
+        message.TextColor3 = Color3.fromRGB(255, 50, 50)
         message.Text = "❌ Wrong key! Please try again."
     end
 end
 
+-- Button event
 button.MouseButton1Click:Connect(function()
-    local inputKey = textBox.Text
-    checkKey(inputKey)
+    checkKey(textBox.Text)
 end)

@@ -1,0 +1,55 @@
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+-- Create key input GUI
+local keyGui = Instance.new("ScreenGui")
+local textBox = Instance.new("TextBox")
+local button = Instance.new("TextButton")
+local message = Instance.new("TextLabel")
+
+keyGui.Name = "KeyGui"
+keyGui.Parent = player:WaitForChild("PlayerGui")
+
+textBox.Size = UDim2.new(0, 200, 0, 50)
+textBox.Position = UDim2.new(0.5, -100, 0.4, 0)
+textBox.PlaceholderText = "Enter your key here"
+textBox.Parent = keyGui
+textBox.ClearTextOnFocus = false
+textBox.Text = ""
+
+button.Size = UDim2.new(0, 200, 0, 50)
+button.Position = UDim2.new(0.5, -100, 0.5, 0)
+button.Text = "Submit Key"
+button.Parent = keyGui
+
+message.Size = UDim2.new(0, 300, 0, 50)
+message.Position = UDim2.new(0.5, -150, 0.6, 0)
+message.Text = ""
+message.TextColor3 = Color3.new(1, 0, 0)
+message.Parent = keyGui
+
+local function loadNUHHub()
+    -- Your entire NUH HUB script here
+    -- For example, loading from Pastebin:
+    loadstring(game:HttpGet("https://pastebin.com/raw/EazBb0qq"))()
+end
+
+local function checkKey(inputKey)
+    local currentDate = os.date("!*t") -- UTC date/time
+    local correctKey = "KEY-" .. currentDate.year .. currentDate.month .. currentDate.day
+    if inputKey == correctKey then
+        message.TextColor3 = Color3.new(0, 1, 0)
+        message.Text = "✅ Correct key! Loading NUH HUB..."
+        wait(1)
+        keyGui:Destroy()
+        loadNUHHub()
+    else
+        message.TextColor3 = Color3.new(1, 0, 0)
+        message.Text = "❌ Wrong key! Please try again."
+    end
+end
+
+button.MouseButton1Click:Connect(function()
+    local inputKey = textBox.Text
+    checkKey(inputKey)
+end)
